@@ -1,4 +1,4 @@
-﻿USE [Cidades]
+﻿ USE [Cidades]
 GO
 /****** Object:  Table [dbo].[Funcionarios]    Script Date: 28/09/2021 20:13:27 ******/
 SET ANSI_NULLS ON
