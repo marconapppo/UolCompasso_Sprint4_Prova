@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace atts03_API_REST_Pokemon
 {
@@ -32,6 +33,9 @@ namespace atts03_API_REST_Pokemon
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "atts03_API_REST_Pokemon", Version = "v1" });
             });
+
+            services.AddDbContext<PokemonContext>(opt =>
+                                               opt.UseInMemoryDatabase("PokemonList"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

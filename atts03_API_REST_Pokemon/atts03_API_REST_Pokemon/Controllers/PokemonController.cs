@@ -9,32 +9,45 @@ using System.Threading.Tasks;
 namespace atts03_API_REST_Pokemon.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PokemonController : ControllerBase
     {
-        private static List<Pokemon> pokemons = new List<Pokemon>();
-        private static int id = 1;
+        private readonly PokemonContext _context;
+
+
+        public PokemonController(PokemonContext context)
+        {
+            _context = context;
+        }
+
 
         [HttpPost]
-        public void AdicionarPokemon([FromBody] Pokemon pokemon)
+        public async Task<ActionResult<Pokemon>> AdicionarPokemonAsync([FromBody] Pokemon pokemon)
         {
-            pokemon.Id = id++;
-            pokemons.Add(pokemon);
+            _context.PokemonItems.Add(pokemon);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetPokemon), new { id = pokemon.Id }, pokemon);
         }
 
         [HttpGet]
         public IEnumerable<Pokemon> GetPokemon()
         {
-            return pokemons;
+            return _context.PokemonItems;
         }
 
-        [HttpDelete]
-        public async void Removerpokemon(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Removerpokemon(int id)
         {
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new System.Uri("https://localhost:5001/api/");
-            HttpResponseMessage resposta = await httpClient.GetAsync($"Pokemon/{id}");
-            var model = await resposta.Content.ReadAsStringAsync<string>();
+            var pokemon = await _context.PokemonItems.FindAsync(id);
+            if (pokemon == null)
+            {
+                return NotFound();
+            }
+
+            _context.PokemonItems.Remove(pokemon);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
     }
