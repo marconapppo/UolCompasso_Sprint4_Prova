@@ -52,9 +52,45 @@ namespace atts04_MongoDBAPI_Auditoria.Controllers
         }
 
         [HttpGet("{pageNumber}")]
-        public void GetPedidoPaginado()
+        public IActionResult GetPedidoPaginado(int pageNumber)
         {
-            
+            //conectando no banco
+            mongo.ConectandoBanco();
+            //retornando os valores de Pedido
+            var listaPedidos = mongo.retornandoBanco();
+            //criando o Json do get
+            var doc = new BsonDocument();
+            doc.Add("pageNumber", pageNumber);
+            doc.Add("pageSize", listaPedidos.Count());
+
+            //resultado para saber quantos descartara em lista seguindo principio de paginacao
+            int resultado = (pageNumber - 1) * 5;
+
+            //caso Não seja um pageNumber valido
+            if(resultado >= listaPedidos.Count())
+            {
+                return NotFound();
+            }
+
+            //removendo os valores que n pertencer a pesquisa (primeiros)
+            listaPedidos.RemoveRange(0, resultado);
+
+            //deixando somente 5 valores na lista (ultimos)
+
+            listaPedidos.RemoveRange(5, (listaPedidos.Count()-5));
+
+
+            //adicionando no array items
+            var docArray = new BsonArray();
+
+            foreach (var pedidos in listaPedidos)
+            {
+                docArray.Add(BsonDocument.Parse(pedidos.ToJson<Pedido>()));
+            }
+
+            doc.Add("items", docArray);
+            return Ok(doc.ToJson());
+
         }
     }
 }
