@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace atts04_MongoDBAPI_Auditoria.Controllers
             mongo.ConectandoBanco();
             //inserindo no mongo
             mongo.InserindoBanco(pedido);
-            
+
         }
 
         [HttpGet]
@@ -35,23 +36,25 @@ namespace atts04_MongoDBAPI_Auditoria.Controllers
             var listaPedidos = mongo.retornandoBanco();
             //criando o Json do get
             var doc = new BsonDocument();
-            doc.Add("pageNumber",1);
-            doc.Add("pageSize", 1);
+            doc.Add("pageNumber", 1);
+            doc.Add("pageSize", listaPedidos.Count());
 
             //adicionando no array items
             var docArray = new BsonArray();
 
-            docArray.Add(listaPedidos.ToJson());
+            foreach (var pedidos in listaPedidos)
+            {
+                docArray.Add(BsonDocument.Parse(pedidos.ToJson<Pedido>()));
+            }
 
-            //foreach (var pedidos in listaPedidos)
-            //{
-            //    Console.WriteLine(pedidos.ToJson<Pedido>());
-                
-            //    docArray.Add(pedidos.ToJson<Pedido>());
-            //}
-            
-            doc.Add("items",docArray);
+            doc.Add("items", docArray);
             return doc.ToJson();
+        }
+
+        [HttpGet("{pageNumber}")]
+        public void GetPedidoPaginado()
+        {
+            
         }
     }
 }

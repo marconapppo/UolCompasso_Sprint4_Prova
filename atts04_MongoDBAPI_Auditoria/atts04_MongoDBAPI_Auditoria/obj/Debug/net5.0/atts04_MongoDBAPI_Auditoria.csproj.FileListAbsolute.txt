@@ -39,3 +39,4 @@ C:\Users\gabri\source\repos\avaliacao_sprint4\atts04_MongoDBAPI_Auditoria\atts04
 C:\Users\gabri\source\repos\avaliacao_sprint4\atts04_MongoDBAPI_Auditoria\atts04_MongoDBAPI_Auditoria\bin\Debug\net5.0\runtimes\linux\native\libmongocrypt.so
 C:\Users\gabri\source\repos\avaliacao_sprint4\atts04_MongoDBAPI_Auditoria\atts04_MongoDBAPI_Auditoria\bin\Debug\net5.0\runtimes\osx\native\libmongocrypt.dylib
 C:\Users\gabri\source\repos\avaliacao_sprint4\atts04_MongoDBAPI_Auditoria\atts04_MongoDBAPI_Auditoria\bin\Debug\net5.0\runtimes\win\native\mongocrypt.dll
+C:\Users\gabri\source\repos\avaliacao_sprint4\atts04_MongoDBAPI_Auditoria\atts04_MongoDBAPI_Auditoria\bin\Debug\net5.0\Newtonsoft.Json.dll
